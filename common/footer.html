@@ -1,0 +1,50 @@
+<div class="footer">
+    <div class="w1440">
+        <a href="index.html" class="logo">
+            <img alt="" data-footer-logo>
+        </a>
+        <div class="info">
+            <dl>
+                <dt>전화번호</dt>
+                <dd data-phone></dd>
+            </dl>
+            <dl>
+                <dt>주소</dt>
+                <dd data-address></dd>
+            </dl>
+            <dl>
+                <dt>사업자번호</dt>
+                <dd data-business-number></dd>
+            </dl>
+            <dl>
+                <dt>대표자</dt>
+                <dd data-representative></dd>
+            </dl>
+        </div>
+        <div class="bottom">
+            <!-- 개인정보처리방침 : 정적 링크 유지 (트립일레븐 공통 약관 페이지) -->
+            <a href="http://design.trip11.net/privacy/privacy_policy.html" class="privacy" target="_blank">개인정보처리방침</a>
+            <!-- copyright : property.tripProviderName 으로 치환 (data-copyright), 값이 없으면 아래 문구 유지 -->
+            <span class="copy" data-copyright="COPYRIGHT©{provider}. ALL RIGHTS RESERVED.">COPYRIGHT©트립일레븐. ALL RIGHTS RESERVED.</span>
+        </div>
+    </div>
+</div>
+
+<!-- 우측 하단 플로팅 버튼 2개. 상담하기(아래) + 예약하기(위) 순으로 쌓인다.
+     예약하기는 `for_m` 이라 모바일에서만 뜨고, 상담하기는 총판A + tripPropertyId 가
+     있을 때 전 화면폭에서 뜬다 (header-footer-mapper.mapConsult). -->
+
+<!-- data-* 속성 : data-consult-button (property.tripPropertyId + partnerType)
+     상담 URL 은 `https://www.bookingplay.co.kr/api/cti_eicn/kakao_happy_talk?tid={tripPropertyId}` -->
+<div id="talk_custom_button" data-consult-wrap>
+  <a title="상담하기" href="#!" target="_blank" data-consult-button>
+    <img src="images/consult.png" alt="상담하기" />
+  </a>
+</div>
+
+<!-- data-* 속성 : data-booking-link (property.realtimeBookingId) -->
+<div class="ft_btn_reserve for_m on">
+  <a title="예약하기" href="#!" target="_blank" data-booking-link>
+    <img src="images/talk.png" alt="예약하기" />
+  </a>
+</div>

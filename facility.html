@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:,">
+    <title>남해 오롯이바다 풀빌라&amp;펜션 - 시설안내</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/facility.css" />
+    <!-- Open Graph Meta Tags for Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="남해 오롯이바다 풀빌라&펜션 - 시설안내" />
+  <meta property="og:description" content="남해 오롯이바다 풀빌라에서 탁 트인 오션뷰와 프라이빗 수영장, 개별바베큐를 즐기며 커플·가족과 함께 바다 감성 가득한 힐링을 경험해보세요." />
+  <meta property="og:image" content="https://bookingplay-media.s3.amazonaws.com/item_images/2026/07/15/kg7Wj13BM6Pz.jpg" />
+  <meta property="og:url" content="https://orosibada.co.kr" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="남해 오롯이바다 풀빌라&펜션 - 시설안내" />
+  <meta name="twitter:description" content="남해 오롯이바다 풀빌라에서 탁 트인 오션뷰와 프라이빗 수영장, 개별바베큐를 즐기며 커플·가족과 함께 바다 감성 가득한 힐링을 경험해보세요." />
+  <meta name="twitter:image" content="https://bookingplay-media.s3.amazonaws.com/item_images/2026/07/15/kg7Wj13BM6Pz.jpg" />
+  <meta name="naver-site-verification" content="5714b53105bc5faca818e9a4ea682ed11e1efcaa" />
+  <meta name="google-site-verification" content="Z0QtM7vb2NuW7Wa9n62PF-EjmyNI7ZRlXvuNHVCw7-M" />
+</head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <!-- MAPPER: property.facilities[current].images[isSelected] + name -->
+        <div class="con0" data-aos="fade-up">
+          <div class="swiper-container">
+            <div class="swiper-wrapper"></div>
+            <div class="swiperNavi">
+              <div class="swiper-button-prev">
+                <img src="images/icon_arrow_left_1.png" alt="" />
+                Prev
+              </div>
+              <div class="bar"></div>
+              <div class="swiper-button-next">
+                Next
+                <img src="images/icon_arrow_right_1.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="tx1"></div>
+        </div>
+
+        <!-- MAPPER: property.facilities[] (동적 생성) -->
+        <div id="snb_wrap">
+          <ul data-facility-nav-list>
+          </ul>
+        </div>
+
+        <!-- MAPPER: property.facilities[current] (name, description, usageGuide, images[0-2]) -->
+        <div class="con9 w1440">
+          <div class="item">
+            <div class="top" data-aos="fade-up">
+              <div class="img">
+                <img alt="" data-facility-image-0 />
+              </div>
+              <div class="tx3 travelFont" data-aos="fade-up" data-facility-name-en></div>
+              <div class="tx0" data-aos="fade-up" data-facility-name></div>
+              <div class="tx1" data-aos="fade-up" data-facility-usage></div>
+            </div>
+            <div class="bottom">
+              <div class="img" data-aos="fade-up" data-facility-image-1></div>
+              <div class="img" data-aos="fade-up" data-facility-image-2></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAPPER: property.facilities[] (excluding current facility) -->
+        <div class="con4">
+          <div class="w1440">
+            <div class="conTitle" data-aos="fade-up">
+              <div class="subTitle"></div>
+              <div class="title"></div>
+              <div class="swiperNavi">
+                <div class="swiper-button-prev">
+                  <img src="images/icon_arrow_left_2.png" alt="" />
+                </div>
+                <div class="bar"></div>
+                <div class="swiper-button-next">
+                  <img src="images/icon_arrow_right_2.png" alt="" />
+                </div>
+              </div>
+            </div>
+            <div class="swiper-container">
+              <div class="swiper-wrapper"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js"></script>
+  <script src="js/data-mapper/pages/header-footer-mapper.js"></script>
+  <script src="js/data-mapper/core/base-mapper.js"></script>
+  <script src="js/data-mapper/pages/facility-mapper.js"></script>
+  <script src="js/image-helpers.js"></script>
+  <script src="js/preview-handler.js"></script>
+  <script src="js/header-footer-loader.js"></script>
+  <script src="js/common.js"></script>
+</html>

@@ -1,0 +1,13 @@
+/* CDN Fonts */
+@import url("https://fonts.cdnfonts.com/css/travel-november");
+@import url('https://hangeul.pstatic.net/hangeul_static/css/maru-buri.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap');
+
+/* CSS Variables */
+:root {
+  --font-ko-main: 'Noto Serif KR', serif;
+  --font-ko-sub: 'MaruBuri', sans-serif;
+  --font-en-main: 'Travel November', serif;
+  --color-primary: #FDFCF4;
+  --color-secondary: #866552;
+}
