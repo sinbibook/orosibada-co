@@ -2,6 +2,26 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <!-- 렌더 게이트: 매핑 전 화면 / 랜딩으로 넘어가기 전 index 깜빡임 방지 (매핑 완료 시 페이드인)
+         해제: IndexMapper.map 완료 시 __tplReveal (랜딩 판단 중엔 index-mapper.js 조기 랜딩 가드가 붙잡아 둔다) -->
+    <style>
+      html.tpl-loading body {
+        opacity: 0;
+      }
+      body {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+    </style>
+    <script>
+      document.documentElement.classList.add('tpl-loading');
+      window.__tplReveal = function () {
+        document.documentElement.classList.remove('tpl-loading');
+      };
+      setTimeout(function () {
+        window.__tplReveal && window.__tplReveal();
+      }, 3000);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:,">
     <title>남해 오롯이바다 풀빌라&amp;펜션 - 홈</title>

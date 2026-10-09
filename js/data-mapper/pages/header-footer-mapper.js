@@ -86,9 +86,46 @@ var HeaderFooterMapper = {
     link.href = selectedLogo.url;
   },
 
+  // MAPPER: homepage.socialLinks.{facebook|instagram|blog|youtube} → [data-homepage-socialLinks-{platform}]
+  //
+  // 값이 있으면 href(+target=_blank rel=noopener) + 노출, 없으면(null·빈 문자열·공백·키 없음) 숨긴다.
+  // 마크업은 매핑 전 깜빡임이 없도록 `.hidden-social-link`(숨김) 상태로 시작한다.
+  // 헤더 네이버 N 로고 버튼은 blog 값을 쓴다(어드민 blog 칸에 네이버 플레이스 주소를 넣는다).
+  // 인스타그램 버튼은 instagram 값. facebook / youtube 는 L형 헤더에 마크업이 없어 매칭 요소가 0개다.
+  // 같은 버튼이 헤더 줄(481px 이상)과 메뉴 패널 `.menu_sns`(480px 이하) 두 곳에 있다.
+  // 래퍼([data-social-wrap])는 안에 보이는 버튼이 하나도 없으면 줄째 숨긴다(margin-top 만 남지 않게).
+  // 버튼이 하나라도 보이면 루트에 data-social="on", 아니면 "off" 를 찍는다(레이아웃 보정 CSS 기준 — :has 대신).
+  mapSocialLinks: function(data) {
+    var socialLinks = (data && data.homepage && data.homepage.socialLinks) || {};
+    var anyOn = false;
+    ['facebook', 'instagram', 'blog', 'youtube'].forEach(function(platform) {
+      var url = consultText(socialLinks[platform]);
+      document.querySelectorAll('[data-homepage-socialLinks-' + platform + ']').forEach(function(el) {
+        if (!url) {
+          el.classList.add('hidden-social-link');
+          el.setAttribute('href', '#!');
+          return;
+        }
+        el.setAttribute('href', url);
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+        el.classList.remove('hidden-social-link');
+        anyOn = true;
+      });
+    });
+    document.querySelectorAll('[data-social-wrap]').forEach(function(wrap) {
+      var hasVisible = Array.prototype.some.call(wrap.querySelectorAll('a'), function(a) {
+        return !a.classList.contains('hidden-social-link');
+      });
+      wrap.classList.toggle('hidden-social-link', !hasVisible);
+    });
+    document.documentElement.setAttribute('data-social', anyOn ? 'on' : 'off');
+  },
+
   mapHeader: function(data) {
     if (!data) return;
     this.mapFavicon(data);
+    this.mapSocialLinks(data);
     if (!data.property) return;
 
     // enabled 값 안전하게 접근

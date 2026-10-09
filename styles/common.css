@@ -379,6 +379,53 @@ body {
 .header .right .btnMenu {
   background-image: url(../images/icon_menu.png);
 }
+/* 헤더 네이버·인스타그램 버튼(socialLinks) — 버튼 줄 맨 앞 [인스타][네이버].
+   값이 없으면 숨김(매퍼가 .hidden-social-link 를 뗀다). 높이 30px(알약 35px 안), 폭 auto 로 로고 비율 유지.
+   ≤1440 은 줄 간격이 5px 라 알약 테두리에 붙어 보여서 아이콘 오른쪽에 5px 를 더한다(=10px).
+   480px 이하는 헤더 버튼 줄에 공간이 없어(로고 축소 + 알약 글자 줄바꿈) 헤더에서 숨기고
+   메뉴 패널 예약하기 아래 줄(.menu_sns, 34px · 간격 12px)로 옮긴다. */
+.hidden-social-link {
+  display: none !important;
+}
+.header .right .hd_sns {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.header .right .hd_sns img {
+  display: block;
+  width: auto;
+  height: 30px;
+}
+@media (max-width: 1440px) {
+  .header .right .hd_sns {
+    margin-right: 5px;
+  }
+}
+.header .menu .menu_sns {
+  display: none;
+}
+@media (max-width: 480px) {
+  .header .right .hd_sns {
+    display: none;
+  }
+  .header .menu .menu_sns {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .header .menu .menu_sns a {
+    display: block;
+    line-height: 0;
+  }
+  .header .menu .menu_sns img {
+    display: block;
+    width: auto;
+    height: 34px;
+  }
+}
 .header .menu {
   position: fixed;
   top: 0;

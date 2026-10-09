@@ -610,6 +610,15 @@
 .con7 .tx1.travelFont {
   font-family: var(--font-en-main);
 }
+/* tx2 미노출 — 제목과 가운데 이미지 사이 간격을 tx1이 대신 가진다 */
+.con7 .tx1 {
+  margin-bottom: 60px;
+}
+@media (max-width: 1440px) {
+  .con7 .tx1 {
+    margin-bottom: 40px;
+  }
+}
 .con7 .tx2 {
   margin-top: 25px;
   margin-bottom: 60px;

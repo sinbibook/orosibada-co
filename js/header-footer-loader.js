@@ -116,6 +116,21 @@ var HeaderFooterLoader = {
       }
     }
 
+    // landing 페이지 체크 — 다른 옵션 페이지와 달리 **명시적으로 켠 경우(true)만** 연다.
+    // (섹션 없음 / enabled false·누락 → 404. index 루트 가드와 같은 기준)
+    if (filename === 'landing') {
+      var landingSection = data.homepage &&
+                           data.homepage.customFields &&
+                           data.homepage.customFields.pages &&
+                           data.homepage.customFields.pages.landing &&
+                           data.homepage.customFields.pages.landing.sections &&
+                           data.homepage.customFields.pages.landing.sections[0];
+      if (!landingSection || landingSection.enabled !== true) {
+        window.location.href = '404.html';
+        return;
+      }
+    }
+
     // layout-map 페이지 체크
     if (filename === 'layout-map') {
       var layoutEnabled = (data.homepage &&
@@ -160,6 +175,8 @@ var HeaderFooterLoader = {
       ReservationMapper.map(data);
     } else if (filename === 'nearby-attractions' && typeof NearbyAttractionsMapper !== 'undefined') {
       NearbyAttractionsMapper.map(data);
+    } else if (filename === 'landing' && typeof LandingMapper !== 'undefined') {
+      LandingMapper.map(data);
     }
   },
 

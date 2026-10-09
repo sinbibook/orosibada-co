@@ -28,7 +28,7 @@ var RoomMapper = {
     // MAPPER: roomtypes[current] interior 이미지 (con7 이미지 3개)
     this.mapCon7Images(rt);
 
-    // MAPPER: customFields.pages.room[current].sections[0].gallery.title (con7 tx2)
+    // MAPPER: customFields.pages.room[current].sections[0].hero.title (con7 tx1)
     this.mapCon7Text(data, rt);
 
     // MAPPER: roomtypes[current] 평면도 이미지 (없으면 구간째 미노출)
@@ -249,7 +249,7 @@ var RoomMapper = {
     }
   },
 
-  // Con7: 텍스트 매핑 (tx1=hero.title, tx2=gallery.title / 값 없으면 하드코딩 fallback)
+  // Con7: 텍스트 매핑 (tx1=hero.title / 값 없으면 하드코딩 fallback). gallery.title(tx2)은 미노출
   mapCon7Text: function(data, rt) {
     if (!rt) return;
 
@@ -264,16 +264,6 @@ var RoomMapper = {
       tx1El.textContent = heroTitle.trim() ? heroTitle : 'I support your beautiful trip';
     }
 
-    // tx2: gallery.title (값 없으면 하드코딩 fallback)
-    var tx2El = document.querySelector('.con7 .center .tx2');
-    if (tx2El) {
-      var galleryTitle = (sec?.gallery?.title || '');
-      if (galleryTitle.trim()) {
-        tx2El.innerHTML = galleryTitle.replace(/\n/g, '<br />');
-      } else {
-        tx2El.innerHTML = '특별한 장소가 주는 특별한 하루<br />이곳에서 최상의 휴식을 경험하세요.';
-      }
-    }
   },
 
   // Con7: 이미지 3개 매핑 (roomtype exterior[0,1,2])

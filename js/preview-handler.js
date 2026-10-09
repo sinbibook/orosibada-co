@@ -100,7 +100,7 @@ class PreviewHandler {
                 this.handlePageNavigation(event.data);
                 break;
             case 'section_update':
-                await this.handleSectionUpdate(data);
+                await this.handleSectionUpdate(event.data);
                 break;
             case 'THEME_UPDATE':
                 this.handleThemeUpdate(data);
@@ -167,7 +167,11 @@ class PreviewHandler {
         this.notifyRenderComplete('UPDATE_COMPLETE');
     }
 
-    async handleSectionUpdate(data) {
+    // ⚠️ event.data 는 SectionUpdateMessage 형태다: { type, page, section, data }.
+    //    data 만 꺼내 currentData 루트에 deepMerge 하면 배열 인덱스("0","1")가 루트 키로 올라가
+    //    오염될 뿐 customFields.pages[page].sections[0][section] 을 갱신하지 못한다.
+    //    page/section 으로 올바른 중첩 경로에 patch 를 만들어 병합한다 (t-template-A 와 같은 수정).
+    async handleSectionUpdate(message) {
         this.adminDataReceived = true;
 
         if (this.fallbackTimeout) {
@@ -179,7 +183,43 @@ class PreviewHandler {
             return;
         }
 
-        this.currentData = this.mergeData(this.currentData, data);
+        const page = message && message.page;
+        const section = message && message.section;
+
+        // socialLinks 는 페이지 섹션이 아니라 homepage.socialLinks(전 페이지 공통 헤더) 값이다.
+        // pages[page].sections[0] 에 넣으면 헤더가 읽지 못하고 pages 만 오염된다.
+        // homepage.socialLinks 를 통째로 바꾼 뒤 헤더 소셜 버튼만 다시 매핑한다(페이지 전체 재렌더 없음).
+        // landing 은 header-footer-mapper.js 를 싣지 않아 매핑할 대상이 없다.
+        if (section === 'socialLinks') {
+            if (!this.currentData.homepage) this.currentData.homepage = {};
+            this.currentData.homepage.socialLinks = (message && message.data) || {};
+            if (window.HeaderFooterMapper && typeof window.HeaderFooterMapper.mapSocialLinks === 'function') {
+                window.HeaderFooterMapper.mapSocialLinks(this.currentData);
+            }
+            this.notifyRenderComplete('SECTION_UPDATE_COMPLETE');
+            return;
+        }
+
+        if (!page || !section) {
+            return;
+        }
+
+        const homepage = this.currentData.homepage || {};
+        const pages = (homepage.customFields && homepage.customFields.pages) || {};
+        const currentSection = (pages[page] && pages[page].sections && pages[page].sections[0]) || {};
+
+        this.currentData = this.deepMerge(this.currentData, {
+            homepage: {
+                customFields: {
+                    pages: {
+                        [page]: {
+                            sections: [Object.assign({}, currentSection, { [section]: message.data })]
+                        }
+                    }
+                }
+            }
+        });
+
         await this.renderTemplate(this.currentData);
         this.refreshPopupFromTemplate(this.currentData);
         this.notifyRenderComplete('SECTION_UPDATE_COMPLETE');
@@ -371,7 +411,8 @@ class PreviewHandler {
             'reservation': 'reservation.html',
             'directions': 'directions.html',
             'nearbyAttractions': 'nearby-attractions.html',
-            'layoutMap': 'layout-map.html'
+            'layoutMap': 'layout-map.html',
+            'landing': 'landing.html'
         };
 
         const targetPage = pageMap[messageData.page];
@@ -465,6 +506,11 @@ class PreviewHandler {
 
         if (currentPage === 'layoutMap') {
             return pages?.layoutMap?.sections?.[0]?.enabled === false;
+        }
+
+        // landing 은 명시적으로 켠 경우(true)만 연다 (index 루트 가드와 같은 기준)
+        if (currentPage === 'landing') {
+            return pages?.landing?.sections?.[0]?.enabled !== true;
         }
 
         return false;
@@ -568,6 +614,7 @@ body.preview-not-found-active > .wrapper {
         if (path.includes('directions.html')) return 'directions';
         if (path.includes('nearby-attractions.html')) return 'nearbyAttractions';
         if (path.includes('layout-map.html')) return 'layoutMap';
+        if (path.includes('landing.html')) return 'landing';
 
         return 'index';
     }

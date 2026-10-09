@@ -6,6 +6,18 @@
       </a>
     </h1>
     <div class="right hd_lnb">
+      <!-- data-* 속성 : data-homepage-socialLinks-instagram (homepage.socialLinks.instagram)
+                       data-homepage-socialLinks-blog (homepage.socialLinks.blog)
+           버튼 줄 맨 앞 [인스타][네이버] (481px 이상). 480px 이하는 헤더에 공간이 없어 숨기고
+           메뉴 패널의 예약하기 아래 줄(.menu_sns)에 같은 버튼을 둔다.
+           ⚠️ <div> 가 아니라 <a> 다 — `.header .right > div` 는 알약 테두리 스타일이다.
+           값이 없으면 숨김 — 매핑 전 깜빡임이 없도록 기본 숨김(.hidden-social-link) -->
+      <a href="#!" target="_blank" rel="noopener" class="hd_sns btn_insta hidden-social-link" aria-label="인스타그램" data-homepage-socialLinks-instagram>
+        <img src="images/insta_logo.png" alt="인스타그램" />
+      </a>
+      <a href="#!" target="_blank" rel="noopener" class="hd_sns btn_naver hidden-social-link" aria-label="네이버" data-homepage-socialLinks-blog>
+        <img src="images/n_logo.png" alt="네이버" />
+      </a>
       <div class="btnReservation btnYbs" data-ybs-button style="display: none;">
         <a href="#!">YBS</a>
       </div>
@@ -23,6 +35,16 @@
       <div class="menuInner" data-menu-container>
       </div>
       <a href="#!" class="btnReservation" data-booking-link>예약하기</a>
+      <!-- 480px 이하 전용 소셜 줄 (헤더 버튼 줄에서 숨긴 [인스타][네이버] 사본, 같은 data 속성).
+           둘 다 값이 없으면 매퍼가 줄째 숨긴다(margin-top 만 남지 않게) -->
+      <div class="menu_sns hidden-social-link" data-social-wrap>
+        <a href="#!" target="_blank" rel="noopener" class="btn_insta hidden-social-link" aria-label="인스타그램" data-homepage-socialLinks-instagram>
+          <img src="images/insta_logo.png" alt="인스타그램" />
+        </a>
+        <a href="#!" target="_blank" rel="noopener" class="btn_naver hidden-social-link" aria-label="네이버" data-homepage-socialLinks-blog>
+          <img src="images/n_logo.png" alt="네이버" />
+        </a>
+      </div>
     </div>
   </div>
 </header>
