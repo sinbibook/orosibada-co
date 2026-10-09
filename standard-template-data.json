@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.1.0",
-    "generatedAt": "2026-10-08T02:22:23.746137975Z",
+    "version": "1.2.0",
+    "generatedAt": "2026-10-09T06:42:01.577592538Z",
     "templateType": "trip_l",
     "propertyId": "c8ad6c9a-b79f-4402-9ce7-6b4fc7304db1",
     "homepageId": "01a0aa01-6ad4-721b-be89-6e18861a2229"
@@ -2262,10 +2262,10 @@
                 "title": "내가 머무는 공간",
                 "images": [
                   {
-                    "id": "01a0aa01-96ab-74f6-b3fc-7e1e13a6fa1c",
-                    "url": "https://orosibada.co.kr/assets/images/room/layout.webp",
+                    "id": "01a11f65-acb6-73bc-b450-eaa883bb7cc4",
+                    "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/homepage/01a0aa01-6ad4-721b-be89-6e18861a2229/layout_map_about/1791528117915-je0gtq5dzx.jpg",
                     "sortOrder": 0,
-                    "description": "#감성#풀오션뷰#휴식",
+                    "description": "",
                     "isSelected": true,
                     "blockId": null
                   }
