@@ -1,7 +1,11 @@
 // Index Page Mapper - 인덱스 페이지 동적 컨텐츠 매핑
 var IndexMapper = {
   map: function(data) {
-    if (!data || !data.property) return;
+    if (!data || !data.property) {
+      this.reveal(); // 매핑할 데이터가 없어도 화면은 노출
+      return;
+    }
+    if (this.maybeRedirectToLanding(data)) return; // 랜딩으로 이동 — 노출하지 않는다
 
     // Con0: 히어로 슬라이더 + 숙소 한글명 매핑
     this.mapHeroSlides(data);
@@ -23,6 +27,85 @@ var IndexMapper = {
 
     // Con5: Closing 섹션 매핑
     this.mapClosingSection(data);
+
+    this.reveal(); // 매핑 완료 → 화면 노출(페이드인)
+  },
+
+  // index.html head 렌더 게이트 해제. 조기 랜딩 가드가 __tplReveal 을 감싸 두므로
+  // 호출 시점의 window.__tplReveal 을 그대로 부른다 (미리 잡아 두면 가드를 건너뛴다).
+  reveal: function() {
+    if (window.__tplReveal) window.__tplReveal();
+  },
+
+  // 랜딩으로 이동을 시작했으면 true. location.replace 는 즉시 페이지를 떠나지 않으므로,
+  // 그 사이 다른 매핑이 끝나며 부르는 __tplReveal 이 index 를 잠깐 드러내지 않게 막는 데 쓴다.
+  leavingToLanding: false,
+
+  goToLanding: function() {
+    this.leavingToLanding = true;
+    window.location.replace('landing.html');
+  },
+
+  // 루트 가드: 랜딩 진입 대상이면 index.html 진입을 landing.html 로 되돌린다 (판단은 shouldEnterLanding).
+  maybeRedirectToLanding: function(data) {
+    var pages = data.homepage && data.homepage.customFields && data.homepage.customFields.pages;
+    if (!this.shouldEnterLanding(pages && pages.landing)) return false;
+
+    this.goToLanding();
+    return true;
+  },
+
+  // 랜딩 진입 판단 — index.html 진입을 landing.html 로 돌려야 하면 true.
+  // 쿼리 파라미터 없이 "어디서 왔는지(referrer)" 로 가른다.
+  //   - 어드민 프리뷰 iframe → false (실제 방문자 진입 경로가 아니다)
+  //   - pages.landing.sections[0].enabled !== true → false (명시적으로 켠 경우만. 어드민 저장 시
+  //     undefined 는 JSON 에서 키째 빠지므로, 누락을 '켜짐' 으로 보면 랜딩을 안 쓰는 숙소가 튕긴다)
+  //   - 같은 사이트 안에서 넘어옴 → false (헤더/푸터 로고, 랜딩의 자기 자신 카드)
+  //   - 랜딩 카드에 등록된 연결 숙소 도메인에서 넘어옴 → false (그 숙소 랜딩의 카드를 눌러 온 경우)
+  //   - 그 외(주소 직접 입력·즐겨찾기·검색/외부 링크) → true
+  shouldEnterLanding: function(landingPage) {
+    if (window.top !== window.self) return false;
+
+    var section = landingPage && landingPage.sections && landingPage.sections[0];
+    if (!section || section.enabled !== true) return false;
+
+    return !this.isFromSameSite() && !this.isFromLinkedProperty(section);
+  },
+
+  getReferrerUrl: function() {
+    try {
+      return document.referrer ? new URL(document.referrer) : null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  isFromSameSite: function() {
+    var ref = this.getReferrerUrl();
+    return !!ref && ref.origin === window.location.origin;
+  },
+
+  // 크로스 도메인 referrer 는 브라우저 기본 정책상 origin 만 오므로 호스트로만 비교한다 (www. 유무는 무시).
+  isFromLinkedProperty: function(section) {
+    var ref = this.getReferrerUrl();
+    if (!ref) return false;
+
+    var self = this;
+    var refHost = this.normalizeHost(ref.host);
+    return ((section && section.about) || []).some(function(card) {
+      var domain = card && typeof card.domain === 'string' ? card.domain.trim() : '';
+      if (!domain) return false;
+      try {
+        var url = new URL(/^https?:\/\//i.test(domain) ? domain : 'https://' + domain);
+        return self.normalizeHost(url.host) === refHost;
+      } catch (e) {
+        return false;
+      }
+    });
+  },
+
+  normalizeHost: function(host) {
+    return String(host || '').toLowerCase().replace(/^www\./, '');
   },
 
   // CON0: 히어로 슬라이드 매핑
@@ -521,3 +604,56 @@ var IndexMapper = {
   }
 
 };
+
+// 조기 랜딩 가드 — 매핑을 기다리지 않고 이 스크립트가 로드되자마자 랜딩 여부부터 판단한다.
+//   index 매핑(header-footer-loader → IndexMapper.map)이 끝나며 렌더 게이트를 풀기 전에 판단이
+//   끝나지 않으면, 매핑된 index(히어로 Prev/Next 등)가 잠깐 보였다가 랜딩으로 넘어갈 수 있다.
+//   판단이 끝날 때까지 __tplReveal 을 붙잡아 둔다.
+//   - 랜딩 진입 대상(shouldEnterLanding) → 화면을 풀지 않고 곧장 landing.html. 이동 판단 뒤에 매핑이
+//     끝나며 노출을 요청해도 무시한다 (판단 = 노출 허용으로 보면 페이지를 떠나기 직전 index 가 비친다)
+//   - 그 외 → 붙잡아 둔 노출을 그대로 진행 (JSON 한 번 더 읽는 시간만큼 늦게 뜰 수 있다)
+//   - 네트워크 실패/지연 대비 3초 뒤에는 무조건 판단을 끝낸다 (head 의 렌더 게이트 타임아웃과 같은 값)
+//   iframe(어드민 프리뷰)·내부 이동은 JSON 을 읽기 전에 바로 건너뛴다 (어차피 랜딩으로 안 보낸다).
+//   (t-template-A index-mapper.js 의 earlyLandingGate 와 같은 동작)
+(function earlyLandingGate() {
+  if (window.top !== window.self) return;
+  if (IndexMapper.isFromSameSite()) return;
+
+  var reveal = window.__tplReveal;
+  var decided = false;
+  var pending = false;
+
+  function finish() {
+    if (decided) return;
+    decided = true;
+    if (pending && reveal) reveal();
+  }
+
+  window.__tplReveal = function() {
+    if (IndexMapper.leavingToLanding) return; // 랜딩으로 떠나는 중 — 노출하지 않는다
+    if (decided) {
+      if (reveal) reveal();
+    } else {
+      pending = true;
+    }
+  };
+
+  setTimeout(function() {
+    pending = true;
+    finish();
+  }, 3000);
+
+  fetch('standard-template-data.json?t=' + Date.now())
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var customFields = (data && data.homepage && data.homepage.customFields) || (data && data.customFields) || {};
+      var landing = customFields.pages && customFields.pages.landing;
+      if (!decided && IndexMapper.shouldEnterLanding(landing)) {
+        decided = true;
+        IndexMapper.goToLanding(); // 노출하지 않고 이동한다 (이후 들어오는 노출 요청은 무시)
+        return;
+      }
+      finish();
+    })
+    .catch(finish);
+})();
