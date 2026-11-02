@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "version": "1.4.0",
-    "generatedAt": "2026-11-02T09:59:27.118931295Z",
+    "version": "1.5.0",
+    "generatedAt": "2026-11-02T10:00:48.249922782Z",
     "templateType": "trip_l",
     "propertyId": "c8ad6c9a-b79f-4402-9ce7-6b4fc7304db1",
     "homepageId": "01a0aa01-6ad4-721b-be89-6e18861a2229"
@@ -291,6 +291,14 @@
             "id": "01a19bb1-676f-76cb-b0f6-7e29d3b095b0",
             "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/facility/01a19bb0-b15c-7bc2-8a81-35a1041a743c/main/1793613453182-wvjqfjf0lh.webp",
             "sortOrder": 1,
+            "description": "",
+            "isSelected": true,
+            "blockId": null
+          },
+          {
+            "id": "01a19bb4-0fb2-74db-9373-882dccf62c13",
+            "url": "https://jlnjajtcnyqupfaqjerz.supabase.co/storage/v1/object/public/app-images/facility/01a19bb0-b15c-7bc2-8a81-35a1041a743c/main/1793613630803-6fwt80mbyn.jpg",
+            "sortOrder": 2,
             "description": "",
             "isSelected": true,
             "blockId": null
@@ -2322,12 +2330,12 @@
               }
             ],
             "slider": false,
+            "videos": [ ],
             "enabled": false,
             "endDate": null,
             "sortOrder": 0,
             "startDate": null,
-            "description": "",
-            "videos": [ ]
+            "description": ""
           }
         ]
       },
